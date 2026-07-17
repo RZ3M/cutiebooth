@@ -2,6 +2,12 @@
 
 a tiny, cutesy web-based photo booth. take photo strips, drag stickers and props on them, generate AI stickers with a prompt, and share on a public wall.
 
+## screenshots
+
+| welcome | camera | editor | photo wall |
+|---|---|---|---|
+| ![welcome](screenshots/01-welcome.png) | ![camera](screenshots/02-camera.png) | ![editor](screenshots/03-editor.png) | ![wall](screenshots/04-wall.png) |
+
 ## features
 
 - **camera booth** with 1/3/4 shot strips, countdown, flash
