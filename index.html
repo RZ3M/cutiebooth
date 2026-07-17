@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>cutiebooth — a tiny photo booth</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Patrick+Hand&family=Special+Elite&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📸%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+  <!-- PAPER BG -->
+  <div class="paper-bg" aria-hidden="true"></div>
+  <div class="tape tape-tl"></div>
+  <div class="tape tape-tr"></div>
+  <div class="tape tape-bl"></div>
+  <div class="tape tape-br"></div>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <h1 class="logo">
+      <span class="logo-doodle">cutie</span><span class="logo-doodle bold">booth</span>
+      <span class="logo-mark">📸</span>
+    </h1>
+    <nav class="top-nav">
+      <button class="nav-btn" data-screen="welcome" aria-label="home">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 12l9-9 9 9M5 10v10h14V10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="nav-btn" data-screen="wall" aria-label="photo wall">
+        <svg viewBox="0 0 24 24" width="20" height="20"><rect x="3" y="3" width="7" height="7" fill="none" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" fill="none" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      </button>
+    </nav>
+  </header>
+
+  <!-- SCREENS -->
+  <main>
+    <!-- WELCOME -->
+    <section class="screen active" id="screen-welcome">
+      <div class="welcome-wrap">
+        <div class="doodle-frame">
+          <h2 class="welcome-title">say cheese!</h2>
+          <p class="welcome-sub">a tiny photo booth<br>for you &amp; your friends</p>
+          <div class="sketch-row">
+            <span class="sketch-icon">✶</span>
+            <span class="sketch-icon">♡</span>
+            <span class="sketch-icon">✶</span>
+          </div>
+          <button class="big-btn" id="btn-start">start the booth</button>
+          <div class="welcome-mini-actions">
+            <button class="mini-btn" id="btn-go-wall">view photo wall →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CAMERA -->
+    <section class="screen" id="screen-camera">
+      <div class="camera-wrap">
+        <div class="booth-frame">
+          <div class="booth-top">
+            <span class="booth-light" id="booth-light"></span>
+            <span class="booth-title">~ cutiebooth ~</span>
+            <span class="booth-light" id="booth-light-2"></span>
+          </div>
+          <div class="video-stage">
+            <video id="video" autoplay playsinline muted></video>
+            <canvas id="snap-canvas" class="hidden"></canvas>
+            <div class="countdown" id="countdown"></div>
+            <div class="flash" id="flash"></div>
+          </div>
+          <div class="strip-preview" id="strip-preview">
+            <div class="strip-slot"></div>
+            <div class="strip-slot"></div>
+            <div class="strip-slot"></div>
+            <div class="strip-slot"></div>
+          </div>
+        </div>
+
+        <div class="camera-controls">
+          <div class="shot-type">
+            <label class="radio-row">
+              <input type="radio" name="shots" value="1">
+              <span>1 shot</span>
+            </label>
+            <label class="radio-row">
+              <input type="radio" name="shots" value="3" checked>
+              <span>3 shots</span>
+            </label>
+            <label class="radio-row">
+              <input type="radio" name="shots" value="4">
+              <span>4 shots</span>
+            </label>
+          </div>
+          <button class="big-btn shutter" id="btn-shutter">
+            <span class="shutter-dot"></span> take pics
+          </button>
+          <p class="hint" id="camera-hint">click when ready. smile. repeat.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDITOR -->
+    <section class="screen" id="screen-editor">
+      <div class="editor-wrap">
+        <div class="editor-stage">
+          <div class="strip-canvas-wrap">
+            <canvas id="strip-canvas"></canvas>
+            <div class="sticker-layer" id="sticker-layer"></div>
+          </div>
+          <div class="caption-strip">
+            <input type="text" id="caption-input" placeholder="write a little caption..." maxlength="60">
+            <div class="caption-actions">
+              <button class="mini-btn" id="btn-add-caption">add caption</button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="editor-side">
+          <div class="panel">
+            <h3 class="panel-title">✶ stickers</h3>
+            <div class="sticker-presets" id="sticker-presets"></div>
+            <div class="ai-gen">
+              <label class="panel-sub">make your own</label>
+              <div class="ai-input-row">
+                <input type="text" id="sticker-prompt" placeholder="a tiny cactus with sunglasses" maxlength="80">
+                <button class="mini-btn dark" id="btn-gen-sticker">generate</button>
+              </div>
+              <div class="ai-status" id="ai-status"></div>
+              <div class="ai-result" id="ai-result"></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3 class="panel-title">✶ props</h3>
+            <div class="prop-presets" id="prop-presets"></div>
+          </div>
+
+          <div class="panel actions">
+            <button class="big-btn" id="btn-download">↓ save strip</button>
+            <button class="mini-btn" id="btn-post-wall">+ post to wall</button>
+            <button class="mini-btn" id="btn-retake">↻ retake</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- WALL -->
+    <section class="screen" id="screen-wall">
+      <div class="wall-wrap">
+        <div class="wall-header">
+          <h2 class="welcome-title small">photo wall</h2>
+          <p class="welcome-sub small">everyone's snaps. leave yours too.</p>
+          <div class="wall-controls">
+            <input type="text" id="wall-name" placeholder="your name (optional)" maxlength="20">
+            <button class="big-btn small" id="btn-make-one">+ make a strip</button>
+          </div>
+        </div>
+        <div class="wall-grid" id="wall-grid">
+          <!-- strips posted here -->
+        </div>
+        <div class="empty-wall" id="empty-wall">
+          <p class="doodle-empty">~ nothing here yet ~</p>
+          <p class="hint">be the first to leave a little strip!</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <footer class="site-footer">
+    <p>made with <span class="doodle-heart">♡</span> · tap, drag, smile</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
